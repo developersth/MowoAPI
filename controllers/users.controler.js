@@ -7,40 +7,52 @@ const sequelize = db.sequelize;
 const Users = db.users;
 const { Op } = require("sequelize");//condition
 exports.create = async function (req, res) {
-    const { username, mobile, email, password } = req.body;
-    var check_data_exist = Users.findAll({
-        where: {
-            [Op.or]: [
-                { email: email },
-                { mobile: mobile },
-                { username: username },
-            ]
-        }
-    });
-    const passwordHash = bcrypt.hashSync(password, 10);
-    const newUser = {
-        username: username,
-        mobile: mobile,
-        email: email,
-        password: passwordHash,
-    };
-    check_data_exist.then(function (users) {
-        if (users.length == 0) {
-             Users.create(newUser).then(data => {
-                res.send({ success: true, message: 'Users Created Successfully', data });
-            })
-                .catch(err => {
-                    res.status(500).send({ success: false,message: err.message || "Some error occurred while creating the users."});
-                });
-        }
-        else {
-            res.status(500).send({ success: false, message: 'Username or Email or Mobile already in user' });
-        }
-    })
+    try {
+        const { username, mobile, email, password } = req.body;
+        var check_data_exist = Users.findAll({
+            where: {
+                [Op.or]: [
+                    { email: email },
+                    { mobile: mobile },
+                    { username: username },
+                ]
+            }
+        });
+        const passwordHash = bcrypt.hashSync(password, 10);
+        const newUser = {
+            username: username,
+            mobile: mobile,
+            email: email,
+            password: passwordHash,
+        };
+        check_data_exist.then(function (users) {
+            if (users.length == 0) {
+                 Users.create(newUser).then(data => {
+                    res.send({ success: true, message: 'Users Created Successfully', data });
+                })
+                    .catch(err => {
+                        res.status(500).send({ success: false,message: err.message || "Some error occurred while creating the users."});
+                    });
+            }
+            else {
+                res.status(500).send({ success: false, message: 'Username or Email or Mobile already in user' });
+            }
+        })
+    } catch (error) {
+        res.status(500).send({ success: false, message: error });
+    }
 }
 exports.findAll = async function (req, res, next) {
-    const result = await Users.findAll();
-    return res.json(result);
+    const result =  Users.findAll();
+    result.then(function (users) {
+        if (users.length > 0) {
+            return res.json(result);
+        }
+        else {
+            res.status(404).send({ success: false, message: 'User No Data' });
+        }
+    })
+  
 }
 exports.findOne = function (req, res) {
     const id = req.params.id;
@@ -81,7 +93,7 @@ exports.delete = async function (req, res) {
 }
 // Login
 exports.login = async (req, res) => {
-    const mobile_or_email = req.body.mobile_or_email;
+    const username = req.body.username;
     const password = req.body.password;
     const passwordHash = password;
     const id = req.params.id;
@@ -89,8 +101,8 @@ exports.login = async (req, res) => {
     await Users.findOne({
         where: {
             [Op.or]: [
-                { email: mobile_or_email },
-                { mobile: mobile_or_email }
+                { email: username },
+                { mobile: username }
             ]
         }
     })
@@ -102,7 +114,12 @@ exports.login = async (req, res) => {
                         // Send JWT
                         // Create and assign token
                         const token = jwt.sign(user, 'your_jwt_secret');
-                        res.header("auth-token", token).send({ "token": token, data });
+                        res.header("auth-token", token).send({ 
+                             token: token,
+                             user_id:data._id,
+                             username:data.username,
+                             email:data.email, 
+                            });
                     } else {
                         // response is OutgoingMessage object that server response http request
                         return res.status(401).send({ success: false, message: "Mobile/Email or Password is wrong." });

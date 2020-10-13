@@ -9,29 +9,9 @@ const passport = require('passport');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
-var test = require('./routes/test');
-require("dotenv").config();
+//require("dotenv").config();
 const bodyParser = require('body-parser');
 var app = express();
-
-// Connect to MongoDB
-/* const URI_CLOUD ="mongodb+srv://sa:H8Lv3Rq72FxmD6up@cluster0.tn9vy.azure.mongodb.net/test?retryWrites=true&w=majority";
-const URI_LOCAL =`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`;
-mongoose.connect(URI_LOCAL, {
-  useCreateIndex: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => {
-    console.log("Successfully Connect to MongoDB.");
-
-  })
-  .catch(err => {
-    console.error("Connection error", err);
-    process.exit();
-  }); */
-
-// sync database mysql
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true  }))
 app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-var corsOptions = {origin: "http://localhost:8080"};
+var corsOptions = {origin: "http://127.0.0.1"};
 app.use(cors(corsOptions));
 // Import passport
 require('./config/passport');

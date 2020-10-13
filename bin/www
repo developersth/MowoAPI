@@ -10,7 +10,7 @@ var http = require('http');
 
 //initial create table
 const db = require("../config/db.config");
-//db.sequelize.sync();
+db.sequelize.sync();
 /**
  * Get port from environment and store in Express.
  */

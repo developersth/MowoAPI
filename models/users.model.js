@@ -18,26 +18,27 @@ module.exports = (sequelize, Sequelize) => {
             },
             email: {
                 type: Sequelize.STRING(100),
-                field: 'email'
+                field: 'email',
+                unique: true
             },
             password: {
                 type: Sequelize.STRING,
                 field: 'password'
             },
-            'created_at': {
+            created_at: {
                 type: Sequelize.DATE(),
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),
             },
-            'updated_at': {
+            updated_at: {
                 type: Sequelize.DATE(),
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),
-            },
+            }
         },
         {
             timestamps: false,
             freezeTableName: true,
             engine: 'InnoDB',
-            charset: 'utf8mb4',
+            charset: 'utf8',
         }
     );
     return Users;
