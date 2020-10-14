@@ -44,9 +44,9 @@ exports.create = async function (req, res) {
 }
 exports.findAll = async function (req, res, next) {
     const result =  Users.findAll();
-    result.then(function (users) {
+   await result.then(function (users) {
         if (users.length > 0) {
-            return res.json(result);
+            return res.json(users);
         }
         else {
             res.status(404).send({ success: false, message: 'User No Data' });
@@ -101,8 +101,9 @@ exports.login = async (req, res) => {
     await Users.findOne({
         where: {
             [Op.or]: [
-                { email: username },
-                { mobile: username }
+                { username: username },
+                { mobile: username },
+                { email: username }
             ]
         }
     })

@@ -30,8 +30,9 @@ app.use(cors(corsOptions));
 require('./config/passport');
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
-//app.use('/api/test',passport.authenticate('jwt', {session: false}),test);
+//app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
+//app.use('/api/users',usersRouter);
+app.use('/api/test',passport.authenticate('jwt', {session: false}),test);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
