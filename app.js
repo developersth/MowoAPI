@@ -24,15 +24,15 @@ app.use(bodyParser.urlencoded({ extended: true  }))
 app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-var corsOptions = {origin: "http://127.0.0.1"};
+//var corsOptions = {origin: "http://192.168.137.196"};
+var corsOptions = {origin: "http://*"};
 app.use(cors(corsOptions));
 // Import passport
 require('./config/passport');
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
-//app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
+app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
 //app.use('/api/users',usersRouter);
-app.use('/api/test',passport.authenticate('jwt', {session: false}),test);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
