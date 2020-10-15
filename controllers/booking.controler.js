@@ -5,39 +5,47 @@ const jwt = require('jsonwebtoken')
 // define variable
 const sequelize = db.sequelize;
 const Users = db.users;
+const Booking = db.booking;
 const { Op } = require("sequelize");//condition
 exports.create = async function (req, res) {
     try {
-        const { username, mobile, email, password } = req.body;
-        var check_data_exist = Users.findAll({
-            where: {
-                [Op.or]: [
-                    { email: email },
-                    { mobile: mobile },
-                    { username: username },
-                ]
-            }
-        });
-        const passwordHash = bcrypt.hashSync(password, 10);
-        const newUser = {
-            username: username,
-            mobile: mobile,
-            email: email,
-            password: passwordHash,
+        const {
+            machine_id,
+            user_id,
+            job_title,
+            location,
+            hospital_id,
+            hospital_name,
+            contact_person,
+            contact_mobile,
+            detail,
+            reservation_date,
+            reservation_time,
+            reservation_by,
+            update_by
+        } = req.body;
+        const newBooking = {
+            machine_id:machine_id,
+            user_id:user_id,
+            job_title:job_title,
+            location:location,
+            hospital_id:hospital_id,
+            hospital_name:hospital_name,
+            contact_person:contact_person,
+            contact_mobile:contact_mobile,
+            detail:detail,
+            reservation_date:reservation_date,
+            reservation_time:reservation_time,
+            reservation_by:reservation_by,
+            update_by:update_by
         };
-        check_data_exist.then(function (users) {
-            if (users.length == 0) {
-                Users.create(newUser).then(data => {
-                    res.send({ success: true, message: 'Users Created Successfully', data });
-                })
-                    .catch(err => {
-                        res.status(500).send({ success: false, message: err.message || "Some error occurred while creating the users." });
-                    });
-            }
-            else {
-                res.send({ success: false, message: 'Username or Email or Mobile already in user' });
-            }
+        await Booking.create(newBooking).then(data => {
+            res.send({ success: true, message: 'Booking Created Successfully', data });
         })
+            .catch(err => {
+                res.status.send({ success: false, message: err.message || "Booking Not Created" });
+            });
+
     } catch (error) {
         res.status(500).send({ success: false, message: error });
     }
