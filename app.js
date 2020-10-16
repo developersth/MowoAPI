@@ -10,6 +10,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var bookingRouter = require('./routes/booking');
+var machineRouter = require('./routes/machine');
+var hospitalRouter = require('./routes/hospital');
 //require("dotenv").config();
 const bodyParser = require('body-parser');
 var app = express();
@@ -34,6 +36,8 @@ app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
 app.use('/api/booking',passport.authenticate('jwt', {session: false}),bookingRouter);
+app.use('/api/machine',passport.authenticate('jwt', {session: false}),machineRouter);
+app.use('/api/hospital',passport.authenticate('jwt', {session: false}),hospitalRouter);
 //app.use('/api/users',usersRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -8,13 +8,13 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            machine_id: {
+            matchine_id: {
                 type: Sequelize.INTEGER,//รหัสเครื่องสลายนิ่ว
-                field: 'machine_id',
+                field: 'matchine_id',
             },
             user_id: {
                 type: Sequelize.INTEGER,
-                field: 'user_id',
+                field: 'user_id',//assign job to
             },
             job_title: {
                 type: Sequelize.STRING(100),
@@ -52,12 +52,12 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.TIME(),
                 field: 'reservation_time'
             },
-            reservation_by: {//รหัสผู้ทำการจอง
-                type: Sequelize.INTEGER,
+            reservation_by: {//ผู้ทำการจอง
+                type: Sequelize.STRING(50),
                 field: 'reservation_by'
             },
-            update_by: {//รหัสผู้แก้ไข
-                type: Sequelize.INTEGER,
+            update_by: {//ผู้แก้ไข
+                type: Sequelize.STRING(50),
                 field: 'update_by'
             },
             created_at: {

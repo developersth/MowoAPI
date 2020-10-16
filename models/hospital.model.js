@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Users = sequelize.define(
-        'users',
+    const hospital = sequelize.define(
+        'hospital',
         {
             _id: {
                 type: Sequelize.INTEGER,
@@ -8,35 +8,26 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            role_id: {
-                type: Sequelize.INTEGER,
-                field: 'role_id',
-                defaultValue: 1,
-            },
-            username: {
+            khet: {
                 type: Sequelize.STRING(100),
-                field: 'username'
+                field: 'khet'
             },
-            mobile: {
-                type: Sequelize.STRING(11),
-                field: 'mobile'
-            },
-            email: {
+            hospital_name: {
                 type: Sequelize.STRING(100),
-                field: 'email',
-                unique: true
+                field: 'hospital_name'
             },
-            password: {
+            address: {
                 type: Sequelize.STRING,
-                field: 'password'
+                field: 'address'
             },
-            firstname: {
-                type: Sequelize.STRING(100),
-                field: 'firstname'
+            tel: {
+                type: Sequelize.STRING(20),
+                field: 'tel'
             },
-            lastname: {
-                type: Sequelize.STRING(100),
-                field: 'lastname'
+            status: {
+                type: Sequelize.INTEGER,
+                field: 'status',//0=หยุดใช้งาน,1 = ใช้งาน
+                defaultValue: 1,
             },
             created_at: {
                 type: Sequelize.DATE(),
@@ -54,5 +45,5 @@ module.exports = (sequelize, Sequelize) => {
             charset: 'utf8',
         }
     );
-    return Users;
+    return hospital;
 };

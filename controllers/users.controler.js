@@ -8,7 +8,7 @@ const Users = db.users;
 const { Op } = require("sequelize");//condition
 exports.create = async function (req, res) {
     try {
-        const { username, mobile, email, password } = req.body;
+        const { username, mobile, email, password,firstname,lastname } = req.body;
         var check_data_exist = Users.findAll({
             where: {
                 [Op.or]: [
@@ -24,6 +24,8 @@ exports.create = async function (req, res) {
             mobile: mobile,
             email: email,
             password: passwordHash,
+            firstname:firstname,
+            lastname:lastname
         };
         check_data_exist.then(function (users) {
             if (users.length == 0) {

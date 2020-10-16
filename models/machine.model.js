@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Users = sequelize.define(
-        'users',
+    const Machine = sequelize.define(
+        'machine',
         {
             _id: {
                 type: Sequelize.INTEGER,
@@ -8,35 +8,18 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            role_id: {
+            machine_name: {
+                type: Sequelize.STRING(100),
+                field: 'machine_name'
+            },
+            model: {
+                type: Sequelize.STRING(100),
+                field: 'model'
+            },
+            status: {
                 type: Sequelize.INTEGER,
-                field: 'role_id',
+                field: 'status',//0=หยุดใช้งาน,1 = ใช้งาน
                 defaultValue: 1,
-            },
-            username: {
-                type: Sequelize.STRING(100),
-                field: 'username'
-            },
-            mobile: {
-                type: Sequelize.STRING(11),
-                field: 'mobile'
-            },
-            email: {
-                type: Sequelize.STRING(100),
-                field: 'email',
-                unique: true
-            },
-            password: {
-                type: Sequelize.STRING,
-                field: 'password'
-            },
-            firstname: {
-                type: Sequelize.STRING(100),
-                field: 'firstname'
-            },
-            lastname: {
-                type: Sequelize.STRING(100),
-                field: 'lastname'
             },
             created_at: {
                 type: Sequelize.DATE(),
@@ -54,5 +37,5 @@ module.exports = (sequelize, Sequelize) => {
             charset: 'utf8',
         }
     );
-    return Users;
+    return Machine;
 };
