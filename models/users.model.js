@@ -30,13 +30,9 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING,
                 field: 'password'
             },
-            firstname: {
+            name: {
                 type: Sequelize.STRING(100),
-                field: 'firstname'
-            },
-            lastname: {
-                type: Sequelize.STRING(100),
-                field: 'lastname'
+                field: 'name'
             },
             created_at: {
                 type: Sequelize.DATE(),

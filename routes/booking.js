@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/booking.controler');
 const db = require('../config/db.config');
+
 // define variable
 const sequelize = db.sequelize;
 const Users = db.users;

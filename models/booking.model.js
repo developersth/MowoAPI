@@ -45,7 +45,7 @@ module.exports = (sequelize, Sequelize) => {
                 field: 'detail'
             },
             reservation_date: {
-                type: Sequelize.DATE(),
+                type: Sequelize.DATEONLY,
                 field: 'reservation_date'
             },
             reservation_time: {

@@ -5,50 +5,55 @@ const jwt = require('jsonwebtoken')
 // define variable
 const Machine = db.machine;
 const { Op } = require("sequelize");//condition
-exports.create = async function (req, res) {
+exports.upload = async function (req, res, next) {
+    console.log(req.file)
+    res.send({ success: true })
+}
+exports.create = function (req, res) {
     try {
-        const { username, mobile, email, password } = req.body;
-        var check_data_exist = Users.findAll({
+        const { machine_name, model, status } = req.body;
+        let path = null;
+        if (req.file) {
+            path = req.file.path;
+            path=path.replace('public\\', '');//ตัด public ทิ้ง
+        }
+
+        const newData = {
+            machine_name: machine_name,
+            model: model,
+            status: status,
+            image_path: path
+        };
+        var check_data_exist = Machine.findAll({
             where: {
-                [Op.or]: [
-                    { email: email },
-                    { mobile: mobile },
-                    { username: username },
+                [Op.and]: [
+                    { machine_name: machine_name },
+                    { model: model }
                 ]
             }
         });
-        const passwordHash = bcrypt.hashSync(password, 10);
-        const newUser = {
-            username: username,
-            mobile: mobile,
-            email: email,
-            password: passwordHash,
-        };
-        check_data_exist.then(function (users) {
-            if (users.length == 0) {
-                Users.create(newUser).then(data => {
-                    res.send({ success: true, message: 'Users Created Successfully', data });
+        check_data_exist.then(function (data) {
+            if (data.length == 0) {
+                Machine.create(newData).then(data => {
+                    res.send({ success: true, message: 'Machine Created Successfully', data });
                 })
                     .catch(err => {
-                        res.status(500).send({ success: false, message: err.message || "Some error occurred while creating the users." });
+                        res.status(500).send({ success: false, message: err.message || "Some error occurred while creating the Machine." });
                     });
             }
             else {
-                res.send({ success: false, message: 'Username or Email or Mobile already in user' });
+                res.send({ success: false, message: 'Machine name already in Machine' });
             }
         })
+
     } catch (error) {
         res.status(500).send({ success: false, message: error });
     }
 }
 exports.findAll = async function (req, res, next) {
-    const result = Machine.findAll();
-    await result.then(function (data) {
-      return res.json(data);
-    })
-    .catch(err => {
-        res.status(500).send({ message: err});
-    });
+    const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model',['image_path','url']]});
+    res.send(machine);
+
 }
 exports.findOne = function (req, res) {
     const id = req.params.id;

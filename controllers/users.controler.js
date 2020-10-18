@@ -8,24 +8,22 @@ const Users = db.users;
 const { Op } = require("sequelize");//condition
 exports.create = async function (req, res) {
     try {
-        const { username, mobile, email, password,firstname,lastname } = req.body;
+        const { name, mobile, email, password} = req.body;
         var check_data_exist = Users.findAll({
             where: {
                 [Op.or]: [
                     { email: email },
-                    { mobile: mobile },
-                    { username: username },
+                    { mobile: mobile }
                 ]
             }
         });
         const passwordHash = bcrypt.hashSync(password, 10);
         const newUser = {
-            username: username,
+            name:name,
             mobile: mobile,
             email: email,
             password: passwordHash,
-            firstname:firstname,
-            lastname:lastname
+           
         };
         check_data_exist.then(function (users) {
             if (users.length == 0) {
@@ -122,7 +120,7 @@ exports.login = async (req, res) => {
                             message: "Login Succesfuly",
                             token: token,
                             user_id: data._id,
-                            username: data.username,
+                            name: data.name,
                             email: data.email,
                         });
                     } else {
