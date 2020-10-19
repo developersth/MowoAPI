@@ -13,7 +13,8 @@ const env = {
     api_auth:{
       username:'admin',
       apasword:'Pb5U@L.):/\z,Qc7',
-    }
+    },
+    Server_URL:"http://127.0.0.1:3000/"
 
   };
   

@@ -3,8 +3,10 @@ const bcrypt = require('bcrypt');
 const db = require('../config/db.config');
 const jwt = require('jsonwebtoken')
 // define variable
+const {fn, col } = db.sequelize
 const Machine = db.machine;
 const { Op } = require("sequelize");//condition
+const env = require('../config/env');
 exports.upload = async function (req, res, next) {
     console.log(req.file)
     res.send({ success: true })
@@ -51,6 +53,8 @@ exports.create = function (req, res) {
     }
 }
 exports.findAll = async function (req, res, next) {
+     //concat
+    //const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model',[fn('CONCAT',env.Server_URL, col('image_path')),'url']]});
     const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model','status',['image_path','url']]});
     res.send(machine);
 
