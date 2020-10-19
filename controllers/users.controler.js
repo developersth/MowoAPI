@@ -35,7 +35,7 @@ exports.create = async function (req, res) {
                     });
             }
             else {
-                res.send({ success: false, message: 'Username or Email or Mobile already in user' });
+                res.send({ success: false, message: 'Email or Mobile already in user' });
             }
         })
     } catch (error) {

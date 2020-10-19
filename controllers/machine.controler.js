@@ -51,7 +51,7 @@ exports.create = function (req, res) {
     }
 }
 exports.findAll = async function (req, res, next) {
-    const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model',['image_path','url']]});
+    const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model','status',['image_path','url']]});
     res.send(machine);
 
 }

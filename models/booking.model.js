@@ -48,9 +48,13 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.DATEONLY,
                 field: 'reservation_date'
             },
-            reservation_time: {
+            reservation_time_start: {
                 type: Sequelize.TIME(),
-                field: 'reservation_time'
+                field: 'reservation_time_start'
+            },
+            reservation_time_end: {
+                type: Sequelize.TIME(),
+                field: 'reservation_time_end'
             },
             reservation_by: {//ผู้ทำการจอง
                 type: Sequelize.STRING(50),

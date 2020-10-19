@@ -20,7 +20,8 @@ exports.create = async function (req, res) {
             contact_mobile,
             detail,
             reservation_date,
-            reservation_time,
+            reservation_time_start,
+            reservation_time_end,
             reservation_by,
             update_by
         } = req.body;
@@ -35,7 +36,8 @@ exports.create = async function (req, res) {
             contact_mobile:contact_mobile,
             detail:detail,
             reservation_date:reservation_date,
-            reservation_time:reservation_time,
+            reservation_time_start:reservation_time_start,
+            reservation_time_end:reservation_time_end,
             reservation_by:reservation_by,
             update_by:update_by
         };
