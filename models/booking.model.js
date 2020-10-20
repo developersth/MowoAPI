@@ -32,9 +32,17 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING(100),
                 field: 'hospital_name',//ชื่อโรงบาล
             },
-            contact_person: {
+            hospital_name: {
                 type: Sequelize.STRING,
-                field: 'contact_person'
+                field: 'hospital_name',//ชื่อโรงบาล
+            },
+            lat: {
+                type: Sequelize.DECIMAL(10, 8),
+                field: 'lat',//latitude
+            },
+            lng: {
+                type: Sequelize.DECIMAL(11, 8),
+                field: 'lng' //longtitude
             },
             contact_mobile: {
                 type: Sequelize.STRING(11),

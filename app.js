@@ -28,7 +28,7 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //var corsOptions = {origin: "http://192.168.137.196"};
-var corsOptions = {origin: "http://localhost:8080"};
+var corsOptions = {origin: "https://localhost:8080"};
 app.use(cors(corsOptions));
 // Import passport
 require('./config/passport');
