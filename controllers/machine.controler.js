@@ -54,8 +54,7 @@ exports.create = function (req, res) {
 }
 exports.findAll = async function (req, res, next) {
      //concat
-    //const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model',[fn('CONCAT',env.Server_URL, col('image_path')),'url']]});
-    const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model','status',['image_path','url']]});
+    const machine= await Machine.findAll({attributes: ['_id','machine_name', 'model','status',[fn('CONCAT',env.Server_URL, col('image_path')),'url']]});
     res.send(machine);
 
 }

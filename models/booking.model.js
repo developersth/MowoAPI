@@ -8,9 +8,9 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            matchine_id: {
+            machine_id: {
                 type: Sequelize.INTEGER,//รหัสเครื่องสลายนิ่ว
-                field: 'matchine_id',
+                field: 'machine_id',
             },
             user_id: {
                 type: Sequelize.INTEGER,
