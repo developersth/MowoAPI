@@ -81,12 +81,7 @@ exports.findMachineBooking = async function (req, res, next) {
                 END AS book_status
                 from machine m`
             , { type: QueryTypes.SELECT });
-        if (result.length > 0) {
             return res.send(result);
-        }
-        else {
-            res.status(404).send({ success: false, message: 'Data No Machine' });
-        }
 
     }
 

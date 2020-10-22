@@ -1,5 +1,5 @@
 const env = {
-    database: 'mowodb',
+    database: 'sodexodb',
     username: 'root',
     password: '',
     host: 'localhost',
@@ -12,7 +12,7 @@ const env = {
     },
     api_auth:{
       username:'admin',
-      apasword:'Pb5U@L.):/\z,Qc7',
+      password:'Pb5U@L.):/\z,Qc7',
     },
     Server_URL:"http://127.0.0.1:3000/"
 

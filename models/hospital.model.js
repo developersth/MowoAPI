@@ -8,10 +8,6 @@ module.exports = (sequelize, Sequelize) => {
                 primaryKey: true,
                 autoIncrement: true
             },
-            khet: {
-                type: Sequelize.STRING(100),
-                field: 'khet'
-            },
             hospital_name: {
                 type: Sequelize.STRING(100),
                 field: 'hospital_name'
@@ -24,8 +20,16 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING(20),
                 field: 'tel'
             },
+            lat: {
+                type: Sequelize.DECIMAL(10, 8),
+                field: 'lat'
+            },
+            lng: {
+                type: Sequelize.DECIMAL(11, 8),
+                field: 'lng'
+            },
             status: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BOOLEAN,
                 field: 'status',//0=หยุดใช้งาน,1 = ใช้งาน
                 defaultValue: 1,
             },

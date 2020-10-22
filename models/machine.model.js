@@ -17,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
                 field: 'model'
             },
             status: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.BOOLEAN,
                 field: 'status',//0=หยุดใช้งาน,1 = ใช้งาน
                 defaultValue: 1,
             },

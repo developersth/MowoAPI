@@ -34,6 +34,11 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING(100),
                 field: 'name'
             },
+            status: {
+                type: Sequelize.BOOLEAN,
+                field: 'status',//0=หยุดใช้งาน,1 = ใช้งาน
+                defaultValue: 1,
+            },
             created_at: {
                 type: Sequelize.DATE(),
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),

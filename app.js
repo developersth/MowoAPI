@@ -23,29 +23,39 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 //app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: true  }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//var corsOptions = {origin: "http://192.168.137.196"};
-var corsOptions = {origin: "http://localhost:8080"};
-app.use(cors(corsOptions));
+//var corsOptions = {origin: "http://localhost:8080"};
+//var corsOptions =  {origin: ["http://localhost:8080","www.two.com","www.three.com"],default: "http://localhost:8080"};
+var allowlist = ['http://localhost:8080', 'http://example2.com']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
+app.use(cors(corsOptionsDelegate));
 // Import passport
 require('./config/passport');
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/users',passport.authenticate('jwt', {session: false}),usersRouter);
-app.use('/api/booking',passport.authenticate('jwt', {session: false}),bookingRouter);
-app.use('/api/machine',passport.authenticate('jwt', {session: false}),machineRouter);
-app.use('/api/hospital',passport.authenticate('jwt', {session: false}),hospitalRouter);
+app.use('/api/users', passport.authenticate('jwt', { session: false }), usersRouter);
+app.use('/api/booking', passport.authenticate('jwt', { session: false }), bookingRouter);
+app.use('/api/machine', passport.authenticate('jwt', { session: false }), machineRouter);
+app.use('/api/hospital', passport.authenticate('jwt', { session: false }), hospitalRouter);
 //app.use('/api/users',usersRouter);
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

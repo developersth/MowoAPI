@@ -9,7 +9,7 @@ const user = {
   id: 1,
   sub: 'admin_dev',
   username: env.api_auth.username,
-  password:  env.api_auth.username,
+  password:  env.api_auth.password,
 }
 
 passport.use(new LocalStrategy({
