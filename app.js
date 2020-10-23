@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //var corsOptions = {origin: "http://localhost:8080"};
 //var corsOptions =  {origin: ["http://localhost:8080","www.two.com","www.three.com"],default: "http://localhost:8080"};
-var allowlist = ['http://localhost:8080', 'http://example2.com']
+var allowlist = ['http://example', 'http://localhost:8080']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {

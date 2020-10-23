@@ -63,22 +63,34 @@ exports.findOne = async function (req, res) {
 exports.update =async function (req, res) {
     try {
         const { hospital_name, address, tel, lat, lng, status } = req.body;
-        const newData = {
-            hospital_name: hospital_name,
-            address: address,
-            tel:tel,
-            lat: lat,
-            lng: lng,
-            status: status,
-
-        };
-        await Hospital.update(newData, {where: {_id: req.params.id}})
-        .then(data => {
-            res.send({ success: true, message: 'Hospital Edit Successfully', data });
-        })
-        .catch(err => {
-            res.status(200).send({ success: false,message:err});
+        var check_data_exist = Hospital.findAll({
+            where: { 
+                [Op.and]: [{ hospital_name: hospital_name }], 
+                [Op.not]: [{ _id: req.params.id }],
+            }
         });
+       await check_data_exist.then(function (doc) {
+            if (doc.length == 0) {
+                const newData = {
+                    hospital_name: hospital_name,
+                    address: address,
+                    tel:tel,
+                    lat: lat,
+                    lng: lng,
+                    status: status,
+                    updated_at:'current timestamp()'
+                };
+                 Hospital.update(newData, {where: {_id: req.params.id}}).then(data => {
+                    res.send({ success: true, message: 'Hospital Edit Successfully', data });
+                })
+                    .catch(err => {
+                        res.status(500).send({ success: false, message: err.message || "Some error occurred while creating the Hospital." });
+                    });
+            }
+            else {
+                res.send({ success: false, message: 'Hospital Name already in Hospital' });
+            }
+        })
              
     } catch (error) {
         res.status(500).send({ error: err });

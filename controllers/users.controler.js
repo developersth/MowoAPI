@@ -45,12 +45,7 @@ exports.create = async function (req, res) {
 exports.findAll = async function (req, res, next) {
     const result = Users.findAll();
     await result.then(function (users) {
-        if (users.length > 0) {
-            return res.json(users);
-        }
-        else {
-            res.status(404).send({ success: false, message: 'User No Data' });
-        }
+       return res.json(users);
     })
 
 }

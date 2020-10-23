@@ -11,6 +11,7 @@ var http = require('http');
 //initial create table
 const db = require("../config/db.config");
 const Users_Role = db.users_role;
+const Status_Desc = db.status_desc;
 db.sequelize.sync();
 //const project =   Users_Role.findOne({ where: { role_name	: 'developer' } });
 // Users_Role.create({role_name	: 'programmer',role_type:'P'});
@@ -18,6 +19,14 @@ db.sequelize.sync();
 // Users_Role.create({role_name	: 'driver',role_type:'D'});
 // Users_Role.create({role_name	: 'mobile',role_type:'M'});
 // Users_Role.create({role_name	: 'customer',role_type:'C'});
+//Status_Desc.create({group_name	: 'booking',status_code:'CB',status_name :'Create Booking'});
+// Status_Desc.create({group_name	: 'booking',status_code:'CB',status_name_en :'Create Booking',status_name_th :'สร้างการจอง'});
+// Status_Desc.create({group_name	: 'booking',status_code:'UN',status_name_en :'Unassigned',status_name_th :'ยังไม่ได้มอบหมาย'});
+// Status_Desc.create({group_name	: 'booking',status_code:'AS',status_name_en :'Assigned',status_name_th :'มอบหมายแล้ว'});
+// Status_Desc.create({group_name	: 'booking',status_code:'AC',status_name_en :'Accepted',status_name_th :'ยอมรับแล้ว'});
+// Status_Desc.create({group_name	: 'booking',status_code:'ST',status_name_en :'Start Job',status_name_th :'เริ่มงาน'});
+// Status_Desc.create({group_name	: 'booking',status_code:'CL',status_name_en :'Cancle Job',status_name_th :'ยกเลิกงาน'});
+// Status_Desc.create({group_name	: 'booking',status_code:'CP',status_name_en :'Completed',status_name_th:'เสร็จสิ้น'});
 
 /**
  * Get port from environment and store in Express.

@@ -10,6 +10,7 @@ const Users = db.users;
 router.post('/', bookingController.create);
 router.get('/', bookingController.findAll);
 router.get('/find-machine-booking', bookingController.findMachineBooking);
+router.get('/find-booking', bookingController.findAllBookingSearch);
 router.get('/:id', bookingController.findOne);
 router.put('/:id', bookingController.update);
 router.delete('/:id', bookingController.delete);

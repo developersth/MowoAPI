@@ -22,4 +22,5 @@ db.users_role = require('../models/users_role.model.js')(sequelize, Sequelize);
 db.booking = require('../models/booking.model.js')(sequelize, Sequelize);
 db.machine = require('../models/machine.model.js')(sequelize, Sequelize);
 db.hospital = require('../models/hospital.model.js')(sequelize, Sequelize);
+db.status_desc = require('../models/status_desc.model.js')(sequelize, Sequelize);
 module.exports = db;

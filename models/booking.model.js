@@ -12,9 +12,13 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.INTEGER,//รหัสเครื่องสลายนิ่ว
                 field: 'machine_id',
             },
-            user_id: {
+            driver_id: {
                 type: Sequelize.INTEGER,
-                field: 'user_id',//assign job to
+                field: 'driver_id',//assign job driver
+            },
+            mobile_id: {
+                type: Sequelize.INTEGER,
+                field: 'mobile_id',//assign job mobile
             },
             job_title: {
                 type: Sequelize.STRING(100),
@@ -68,9 +72,21 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING(50),
                 field: 'reservation_by'
             },
+            duration_hours: {
+                type: Sequelize.DATEONLY,
+                field: 'duration_hours'
+            },
+            duration_minutes: {
+                type: Sequelize.TIME(),
+                field: 'duration_minutes'
+            },
             update_by: {//ผู้แก้ไข
                 type: Sequelize.STRING(50),
                 field: 'update_by'
+            },
+            status: {//
+                type: Sequelize.STRING(2),
+                field: 'status'
             },
             created_at: {
                 type: Sequelize.DATE(),
