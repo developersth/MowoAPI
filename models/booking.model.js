@@ -88,6 +88,11 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.STRING(2),
                 field: 'status'
             },
+            cancel_status: {//
+                type: Sequelize.BOOLEAN,
+                field: 'cancel_status',
+                defaultValue:0
+            },
             created_at: {
                 type: Sequelize.DATE(),
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),

@@ -27,9 +27,9 @@ exports.create = async function (req, res) {
             reservation_by,
             update_by,
         } = req.body;
-        var status="";
-        if (mobile_id) status="AS"
-        else status="CB"
+        var status = "";
+        if (mobile_id) status = "AS"
+        else status = "CB"
         const newBooking = {
             machine_id: machine_id,
             driver_id: driver_id,
@@ -46,7 +46,7 @@ exports.create = async function (req, res) {
             reservation_time_end: reservation_time_end,
             reservation_by: reservation_by,
             update_by: update_by,
-            status:status
+            status: status
         };
 
         //check เครื่องว่าง
@@ -73,21 +73,21 @@ exports.create = async function (req, res) {
     }
 }
 exports.findAllBookingSearch = async function (req, res, next) {
-    const { status, start_date, end_date, keyword,lang } = req.query;
+    const { status, start_date, end_date, keyword, lang } = req.query;
     var cond = "";
     if (status) {
-        cond = cond + " and b.status='" + status +"'"
+        cond = cond + " and b.status='" + status + "'"
     }
     if (start_date && end_date) {
         cond = cond + " and b.reservation_date BETWEEN '" + start_date + "' and '" + end_date + "'"
     }
     if (keyword) {
-        cond = cond + `and job_title like '%`+keyword+ `%' 
-                    or m.name like '%`+keyword+ `%'
-                    or d.name like '%`+keyword+ `%'
-                    or book_id like '%`+keyword+ `%' `
+        cond = cond + `and job_title like '%` + keyword + `%' 
+                    or m.name like '%`+ keyword + `%'
+                    or d.name like '%`+ keyword + `%'
+                    or book_id like '%`+ keyword + `%' `
     }
-    if (!lang) {lang="en";} //language
+    if (!lang) { lang = "en"; } //language
     var sql = `select distinct
                 book_id,
                 machine_id,
@@ -108,7 +108,7 @@ exports.findAllBookingSearch = async function (req, res, next) {
                 reservation_time_end,
                 concat(TIME_FORMAT(reservation_time_start,'%H:%i'),'-',TIME_FORMAT(reservation_time_end,'%H:%i')) as reserv_time,
                 reservation_by,
-                sd.status_name_`+lang+` as status_name
+                sd.status_name_`+ lang + ` as status_name
             from
                 booking b
             left join users d
@@ -140,54 +140,108 @@ exports.findMachineBooking = async function (req, res, next) {
     if (!reservation_date || !reservation_time_start || !reservation_time_end) {
         res.status(200).send({ success: false, message: 'please put reserv_date, time_start, time_end' });
     } else {
-        var sql = `SELECT m._id,m.machine_name,m.model,CONCAT(' ` + env.Server_URL + `',m.image_path) as url,
-                    CASE
-                        WHEN m._id  in (SELECT b.machine_id FROM booking b 
-                                        where  b.reservation_date = '`+ reservation_date + `' 
-                                        AND	   (b.reservation_time_start BETWEEN '`+ reservation_time_start + `' AND '` + reservation_time_end + `' 
-                                        OR     b.reservation_time_end BETWEEN '`+ reservation_time_start + `' AND '` + reservation_time_end + `'))  THEN 0
-                        ELSE 1 
-                    END AS book_status
-                    from machine m`
+        var sql = `select
+                    m._id,
+                    m.machine_name,
+                    m.model,
+                    CONCAT('`+ env.Server_URL + `', m.image_path) as url,
+                    case
+                        when m._id in (
+                        select
+                            b.machine_id
+                        from
+                            booking b
+                        where
+                            b.reservation_date = '`+ reservation_date + `'
+                            and (b.reservation_time_start between '`+ reservation_time_start + `' and '` + reservation_time_end + `'
+                            or b.reservation_time_end between '`+ reservation_time_start + `' and '` + reservation_time_end + `')) then 0
+                        else 1
+                    end as book_status
+                from
+                    machine m`
         const result = await sequelize.query(sql, { type: QueryTypes.SELECT });
         return res.send(result);
     }
 }
-exports.findOne = function (req, res) {
-    const id = req.params.id;
 
-    Users.findByPk(id)
-        .then(data => {
-            res.send(data);
+exports.findOne = async function (req, res) {
+    const id = req.params.id;
+    await Booking.findByPk(id)
+        .then(function (data)  {
+            if (data){
+                res.send(data);
+            }else{
+                res.status(404).send({message: "Booking Not found with id=" + id});
+            }
         })
         .catch(err => {
-            res.status(500).send({
-                message: "Error retrieving Users with id=" + id
-            });
+            res.status(500).send({message: "Error retrieving Booking with id=" + id});
         });
 }
-exports.update = function (req, res) {
+exports.update = async function (req, res) {
     try {
-        Users.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, users) {
-            if (!users)
-                return res.status(404).send({ message: "User No data found." });
-            else
-                res.send({ success: true, message: `Update User ID: ${users.id} successfully.` })
+        const {
+            machine_id,
+            driver_id,
+            mobile_id,
+            job_title,
+            location,
+            hospital_id,
+            hospital_name,
+            contact_person,
+            contact_mobile,
+            detail,
+            reservation_date,
+            reservation_time_start,
+            reservation_time_end,
+            reservation_by,
+            update_by,
+        } = req.body;
+        const newBooking = {
+            machine_id: machine_id,
+            driver_id: driver_id,
+            mobile_id: mobile_id,
+            job_title: job_title,
+            location: location,
+            hospital_id: hospital_id,
+            hospital_name: hospital_name,
+            contact_person: contact_person,
+            contact_mobile: contact_mobile,
+            detail: detail,
+            reservation_date: reservation_date,
+            reservation_time_start: reservation_time_start,
+            reservation_time_end: reservation_time_end,
+            reservation_by: reservation_by,
+            update_by: update_by
+        };
+
+        Booking.update(newData, { where: { book_id: req.params.book_id } }).then(data => {
+            res.send({ success: true, message: 'Booking Edit Successfully', data });
         })
+            .catch(err => {
+                res.status(500).send({ success: false, message: err.message || "Some error occurred while Edit the Booking." });
+            });
+
     } catch (error) {
-        res.status(500).send({ error: err });
+        res.status(500).send({ error: error });
     }
 }
-exports.delete = async function (req, res) {
+exports.cancel_booking =async function (req, res) {
     try {
-        await Users.findByIdAndRemove(req.params.id, function (err, users) {
-            if (!users)
-                return res.status(404).send({ message: "User No data found." });
-            else
-                res.send({ message: "'Delete users successfully." })
+        const newData={
+            cancel_booking:1,
+            status:'CC'
+        }
+        await Booking.update(newData,{where: {book_id: req.params.book_id}})
+        .then(data => {
+            res.send({ success: true, message: 'Booking Cancel Successfully', data });
         })
+        .catch(err => {
+            res.status(200).send({ success: false,message:err});
+        });
+             
     } catch (error) {
-        res.status(500).send({ error: err });
+        res.status(500).send({ error: error });
     }
 }
 

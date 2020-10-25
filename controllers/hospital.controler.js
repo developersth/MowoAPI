@@ -26,7 +26,7 @@ exports.create = async function (req, res) {
                     res.send({ success: true, message: 'Hospital Created Successfully', data });
                 })
                     .catch(err => {
-                        res.status(500).send({ success: false, message: err.message || "Some error occurred while creating the users." });
+                        res.status(500).send({ success: false, message: err.message || "Some error occurred while Edit the Hospital." });
                     });
             }
             else {
