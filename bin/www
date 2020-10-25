@@ -27,7 +27,7 @@ db.sequelize.sync();
 // Status_Desc.create({group_name	: 'booking',status_code:'ST',status_name_en :'Start Job',status_name_th :'เริ่มงาน'});
 // Status_Desc.create({group_name	: 'booking',status_code:'CL',status_name_en :'Cancle Job',status_name_th :'ยกเลิกงาน'});
 // Status_Desc.create({group_name	: 'booking',status_code:'CP',status_name_en :'Completed',status_name_th:'เสร็จสิ้น'});
-//Status_Desc.create({group_name	: 'booking',status_code:'CC',status_name_en :'Cancle Booking',status_name_th:'ยกเลิกการจอง'});
+// Status_Desc.create({group_name	: 'booking',status_code:'CC',status_name_en :'Cancle Booking',status_name_th:'ยกเลิกการจอง'});
 /**
  * Get port from environment and store in Express.
  */

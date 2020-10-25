@@ -1,8 +1,8 @@
 const env = {
     database: 'sodexodb',
-    username: 'root',
-    password: '',
-    host: 'localhost',
+    username: 'sodexodb',
+    password: 'sodexodb',
+    host: 'mangoaccth.com',
     dialect: 'mysql',
     pool: {
       max: 5,
