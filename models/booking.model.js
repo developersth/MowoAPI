@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const Booking = sequelize.define(
         'booking',
         {
-            _id: {
+            book_id: {
                 type: Sequelize.INTEGER,
                 field: 'book_id',
                 primaryKey: true,

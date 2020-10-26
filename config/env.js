@@ -14,7 +14,7 @@ const env = {
       username:'admin',
       password:'p@ssw0rd',
     },
-    Server_URL:"https://node-js-sodexo.herokuapp.com/"
+    Server_URL:"http://127.0.0.1:3000/"
 
   };
   

@@ -215,7 +215,7 @@ exports.update = async function (req, res) {
             update_by: update_by
         };
 
-        Booking.update(newData, { where: { book_id: req.params.book_id } }).then(data => {
+        await Booking.update(newBooking,  {where: {book_id: req.params.id}}).then(data => {
             res.send({ success: true, message: 'Booking Edit Successfully', data });
         })
             .catch(err => {
@@ -223,6 +223,7 @@ exports.update = async function (req, res) {
             });
 
     } catch (error) {
+        console.log(error)
         res.status(500).send({ error: error });
     }
 }
