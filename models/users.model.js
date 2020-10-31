@@ -11,7 +11,6 @@ module.exports = (sequelize, Sequelize) => {
             role_id: {
                 type: Sequelize.INTEGER,
                 field: 'role_id',
-                defaultValue: 1,
             },
             username: {
                 type: Sequelize.STRING(100),
@@ -33,6 +32,10 @@ module.exports = (sequelize, Sequelize) => {
             name: {
                 type: Sequelize.STRING(100),
                 field: 'name'
+            },
+            last_login: {
+                type: Sequelize.DATE(),
+                field: 'last_login',
             },
             status: {
                 type: Sequelize.BOOLEAN,

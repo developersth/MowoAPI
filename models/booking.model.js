@@ -48,6 +48,10 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.DECIMAL(11, 8),
                 field: 'lng' //longtitude
             },
+            contact_person: {
+                type: Sequelize.STRING(50),
+                field: 'contact_person'
+            },
             contact_mobile: {
                 type: Sequelize.STRING(11),
                 field: 'contact_mobile'

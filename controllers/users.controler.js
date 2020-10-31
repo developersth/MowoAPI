@@ -8,7 +8,7 @@ const Users = db.users;
 const { Op } = require("sequelize");//condition
 exports.create = async function (req, res) {
     try {
-        const { name, mobile, email, password} = req.body;
+        const { name, mobile, email, password } = req.body;
         var check_data_exist = Users.findAll({
             where: {
                 [Op.or]: [
@@ -19,11 +19,11 @@ exports.create = async function (req, res) {
         });
         const passwordHash = bcrypt.hashSync(password, 10);
         const newUser = {
-            name:name,
+            name: name,
             mobile: mobile,
             email: email,
             password: passwordHash,
-           
+
         };
         check_data_exist.then(function (users) {
             if (users.length == 0) {
@@ -45,9 +45,31 @@ exports.create = async function (req, res) {
 exports.findAll = async function (req, res, next) {
     const result = Users.findAll();
     await result.then(function (users) {
-       return res.json(users);
+        return res.json(users);
     })
 
+}
+exports.findAllSearch = async function (req, res, next) {
+    var sql = `select
+                us._id,
+                role_id,
+                username,
+                mobile,
+                email,
+                password,
+                name,
+                last_login,
+                status,
+                us.created_at,
+                us.updated_at,
+                ur.role_name,
+                ur.role_type 
+            from
+                users us
+            left join users_role ur
+            on us.role_id  = ur._id `
+    const result = await sequelize.query(sql, { type: Op.SELECT });
+    return res.send(result[0]);
 }
 exports.findOne = function (req, res) {
     const id = req.params.id;

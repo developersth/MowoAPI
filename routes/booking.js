@@ -14,5 +14,5 @@ router.get('/find-booking', bookingController.findAllBookingSearch);
 router.get('/:id', bookingController.findOne);
 router.put('/:id', bookingController.update);
 router.put('/:id', bookingController.cancel_booking);
-
+router.delete('/:id', bookingController.delete);
 module.exports = router;

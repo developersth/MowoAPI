@@ -102,6 +102,7 @@ exports.findAllBookingSearch = async function (req, res, next) {
                 lat,
                 lng,
                 contact_mobile,
+                contact_person,
                 detail,
                 reservation_date,
                 reservation_time_start,
@@ -245,4 +246,12 @@ exports.cancel_booking =async function (req, res) {
         res.status(500).send({ error: error });
     }
 }
-
+exports.delete =async function (req, res) {
+    try {
+     const data =  await Booking.destroy({where: {book_id: req.params.id}})
+     res.send({ success: true, message: 'Delete Successfully', data });
+  
+    } catch (error) {
+        res.status(200).send({ success: false,message:error});
+    }
+}

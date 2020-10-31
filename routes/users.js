@@ -8,6 +8,7 @@ const Users = db.users;
 
 router.post('/', userController.create);
 router.get('/', userController.findAll);
+router.get('/search', userController.findAllSearch);
 router.get('/:id', userController.findOne);
 router.put('/:id', userController.update);
 router.delete('/:id', userController.delete);
