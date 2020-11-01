@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const machinController = require('../controllers/machine.controler');
-const db = require('../config/db.config');
-const multer = require('multer')
+const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/uploads/machine')
+        cb(null, './uploads/machine')
     },
     filename: (req, file, cb) => {
         cb(null, 'file-' + Date.now() + '.' +
@@ -22,4 +21,5 @@ const upload = multer({ storage: storage,limits:{fieldSize:1024*1024*5},fileFilt
 router.post('/',upload.single('images'), machinController.create);
 router.get('/', machinController.findAll);
 router.get('/:id', machinController.findOne);
+router.delete('/:id', machinController.delete);
 module.exports = router;
