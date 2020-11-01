@@ -156,24 +156,35 @@ exports.login = async (req, res) => {
     })
         .then(data => {
             if (data) {
-                bcrypt.compare(passwordHash, data.password, function (err, user) {
-                    if (err) res.status(400).send(err);
-                    if (user) {
-                        // Send JWT
-                        // Create and assign token
-                        const token = jwt.sign(user, 'your_jwt_secret');
-                        res.header("auth-token", token).send({
-                            success: true,
-                            message: "Login Succesfuly",
-                            token: token,
-                            user_id: data._id,
-                            name: data.name,
-                            email: data.email,
-                        });
-                    } else {
-                        // response is OutgoingMessage object that server response http request
-                        return res.send({ success: false, message: "Mobile/Email or Password is wrong." });
-                    }
+                let role_name = ""
+                let role_type = "";
+                 UsersRole.findByPk(data.role_id).then(role => {
+                     if(role){
+                        role_name   = role.role_name,
+                        role_type   = role.role_type
+                     }
+                     bcrypt.compare(passwordHash, data.password, function (err, user) {
+                        if (err) res.status(400).send(err);
+                        if (user) {
+                            // Send JWT
+                            // Create and assign token
+                            const token = jwt.sign(user, 'your_jwt_secret');
+                            res.header("auth-token", token).send({
+                                success     : true,
+                                message     : "Login Succesfuly",
+                                token       : token,
+                                user_id     : data._id,
+                                name        : data.name,
+                                email       : data.email,
+                                role_id     : data.role_id,
+                                role_name   : role_name,
+                                role_type   : role_type
+                            });
+                        } else {
+                            // response is OutgoingMessage object that server response http request
+                            return res.send({ success: false, message: "Mobile/Email or Password is wrong." });
+                        }
+                    })
                 })
             }
             else return res.send({ success: false, message: "Mobile/Email not found" });
