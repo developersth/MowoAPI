@@ -5,27 +5,30 @@ const jwt = require('jsonwebtoken')
 // define variable
 const sequelize = db.sequelize;
 const Users = db.users;
-const { Op } = require("sequelize");//condition
+const UsersRole = db.users_role;
+const { Op, json } = require("sequelize");//condition
 exports.create = async function (req, res) {
     try {
-        const { name, mobile, email, password } = req.body;
+        const { name, username,password, email,mobile,role_id,status } = req.body;
         var check_data_exist = Users.findAll({
             where: {
                 [Op.or]: [
-                    { email: email },
-                    { mobile: mobile }
+                    { mobile: mobile },
+                    { username : username },
                 ]
             }
         });
         const passwordHash = bcrypt.hashSync(password, 10);
         const newUser = {
-            name: name,
-            mobile: mobile,
-            email: email,
-            password: passwordHash,
-
+            name    :   name,
+            username:   username,
+            password:   passwordHash,
+            email   :   email,
+            mobile  :   mobile,
+            role_id :   role_id,
+            status  :   status
         };
-        check_data_exist.then(function (users) {
+       await check_data_exist.then(function (users) {
             if (users.length == 0) {
                 Users.create(newUser).then(data => {
                     res.send({ success: true, message: 'Users Created Successfully', data });
@@ -35,7 +38,7 @@ exports.create = async function (req, res) {
                     });
             }
             else {
-                res.send({ success: false, message: 'Email or Mobile already in user' });
+                res.send({ success: false, message: 'Username or Mobile already in User' });
             }
         })
     } catch (error) {
@@ -48,6 +51,10 @@ exports.findAll = async function (req, res, next) {
         return res.json(users);
     })
 
+}
+exports.getUserRole = async function (req, res, next) {
+    const result = await UsersRole.findAll();
+    return res.json(result);
 }
 exports.findAllSearch = async function (req, res, next) {
     var sql = `select
@@ -73,7 +80,6 @@ exports.findAllSearch = async function (req, res, next) {
 }
 exports.findOne = function (req, res) {
     const id = req.params.id;
-
     Users.findByPk(id)
         .then(data => {
             res.send(data);
@@ -84,28 +90,52 @@ exports.findOne = function (req, res) {
             });
         });
 }
-exports.update = function (req, res) {
+exports.update =async function (req, res) {
     try {
-        Users.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, users) {
-            if (!users)
-                return res.status(404).send({ message: "User No data found." });
-            else
-                res.send({ success: true, message: `Update User ID: ${users.id} successfully.` })
+        const { name, username,password, email,mobile,role_id,status } = req.body;
+        const check_data_exist = Users.findAll({
+            where: { 
+                [Op.and]: [{ username: username }], 
+                [Op.not]: [{ _id: req.params.id }],
+            }
+        });
+        await check_data_exist.then(function (users) {
+            if (users.length> 0) {
+                res.send({ success: false, message: "Username already in User" });
+            }else{
+                let passwordHash=""
+                const userObj =  Users.findByPk(req.params.id);
+                const oldPassword = userObj.password;
+                
+                if (password){
+                    passwordHash = bcrypt.hashSync(password, 10);
+                }else{
+                    passwordHash = oldPassword;
+                }
+                const newUser = {
+                    name    :   name,
+                    username:   username,
+                    password:   passwordHash,
+                    email   :   email,
+                    mobile  :   mobile,
+                    role_id :   role_id,
+                    status  :   status
+                };
+                const result =  Users.update(newUser, {where: {_id: req.params.id}})
+                res.send({ success: true, message: 'User Edit Successfully', result });
+            }
         })
+
     } catch (error) {
-        res.status(500).send({ error: err });
+        res.send({ success: false, message: error });
     }
 }
 exports.delete = async function (req, res) {
     try {
-        await Users.findByIdAndRemove(req.params.id, function (err, users) {
-            if (!users)
-                return res.status(404).send({ message: "User No data found." });
-            else
-                res.send({ message: "'Delete users successfully." })
-        })
+        await  Users.destroy({where: {_id: req.params.id}})
+        res.send({ success: true, message: 'Delete User Successfully' });
     } catch (error) {
-        res.status(500).send({ error: err });
+        res.send({ success: false, message: error });
     }
 }
 // Login

@@ -22,8 +22,7 @@ module.exports = (sequelize, Sequelize) => {
             },
             email: {
                 type: Sequelize.STRING(100),
-                field: 'email',
-                unique: true
+                field: 'email'
             },
             password: {
                 type: Sequelize.STRING,
@@ -36,6 +35,10 @@ module.exports = (sequelize, Sequelize) => {
             last_login: {
                 type: Sequelize.DATE(),
                 field: 'last_login',
+            },
+            image_path: {
+                type: Sequelize.STRING,
+                field: 'image_path'
             },
             status: {
                 type: Sequelize.BOOLEAN,
