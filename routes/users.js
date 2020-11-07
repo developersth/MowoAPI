@@ -10,6 +10,7 @@ router.post('/', userController.create);
 router.get('/', userController.findAll);
 router.get('/search', userController.findAllSearch);
 router.get('/getUserRole', userController.getUserRole);
+router.get('/getUserType/:name', userController.getUserType);
 router.get('/:id', userController.findOne);
 router.put('/:id', userController.update);
 router.delete('/:id', userController.delete);

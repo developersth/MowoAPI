@@ -7,6 +7,7 @@ const sequelize = db.sequelize;
 const Users = db.users;
 const UsersRole = db.users_role;
 const { Op, json } = require("sequelize");//condition
+const { users_role } = require('../config/db.config');
 exports.create = async function (req, res) {
     try {
         const { name, username,password, email,mobile,role_id,status } = req.body;
@@ -89,6 +90,31 @@ exports.findOne = function (req, res) {
                 message: "Error retrieving Users with id=" + id
             });
         });
+}
+exports.getUserType = async function (req, res) {
+    const name = req.params.name.toLowerCase();
+    let sql =`select
+            users._id,
+            role_id,
+            username,
+            mobile,
+            email,
+            password,
+            name,
+            last_login,
+            image_path,
+            status,
+            users.created_at,
+            users.updated_at
+        from
+            users
+        inner join users_role ur on
+            users.role_id = ur._id
+        where
+            ur.role_name = '`+name+`'`
+
+     const result = await sequelize.query(sql, { type: Op.SELECT });
+     return res.send(result[0]);
 }
 exports.update =async function (req, res) {
     try {

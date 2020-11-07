@@ -181,6 +181,7 @@ exports.findOne = async function (req, res) {
 }
 exports.update = async function (req, res) {
     try {
+
         const {
             machine_id,
             driver_id,
@@ -198,6 +199,9 @@ exports.update = async function (req, res) {
             reservation_by,
             update_by,
         } = req.body;
+        let status = "";
+        if (mobile_id) status = "AS"
+        else status = "CB"
         const newBooking = {
             machine_id: machine_id,
             driver_id: driver_id,
@@ -213,6 +217,7 @@ exports.update = async function (req, res) {
             reservation_time_start: reservation_time_start,
             reservation_time_end: reservation_time_end,
             reservation_by: reservation_by,
+            status:status,
             update_by: update_by
         };
 
