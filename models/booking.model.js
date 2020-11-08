@@ -97,6 +97,15 @@ module.exports = (sequelize, Sequelize) => {
                 field: 'cancel_status',
                 defaultValue:0
             },
+            booking_type: {//
+                type: Sequelize.STRING(1),
+                field: 'booking_type',
+                defaultValue:'A' //A=Admin, C=Customerr
+            },
+            cus_id: {
+                type: Sequelize.INTEGER,//รหัสลูกค้า
+                field: 'cus_id',
+            },
             created_at: {
                 type: Sequelize.DATE(),
                 defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),

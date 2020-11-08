@@ -46,6 +46,7 @@ exports.create = async function (req, res) {
             reservation_time_end: reservation_time_end,
             reservation_by: reservation_by,
             update_by: update_by,
+            booking_type:'A',
             status: status
         };
 
@@ -61,12 +62,57 @@ exports.create = async function (req, res) {
             res.send({ success: false, message: 'Machine ID:' + machine_id + ' this already reserved' });
         else {
             await Booking.create(newBooking).then(data => {
-                res.send({ success: true, message: 'Machine Created Successfully', data });
+                res.send({ success: true, message: 'Booking Created Successfully', data });
             })
                 .catch(err => {
                     res.status.send({ success: false, message: err.message || "Booking Not Created" });
                 });
         }
+
+    } catch (error) {
+        res.status(500).send({ success: false, message: error });
+    }
+}
+exports.createBookingCustomer = async function (req, res) {
+    try {
+        const {
+            job_title,
+            location,
+            hospital_id,
+            hospital_name,
+            contact_person,
+            contact_mobile,
+            detail,
+            reservation_date,
+            reservation_time_start,
+            reservation_time_end,
+            reservation_by,
+            update_by,
+            cus_id
+        } = req.body;
+        const newBooking = {
+            job_title: job_title,
+            location: location,
+            hospital_id: hospital_id,
+            hospital_name: hospital_name,
+            contact_person: contact_person,
+            contact_mobile: contact_mobile,
+            detail: detail,
+            reservation_date: reservation_date,
+            reservation_time_start: reservation_time_start,
+            reservation_time_end: reservation_time_end,
+            reservation_by: reservation_by,
+            update_by: update_by,
+            status: 'CB',
+            booking_type:'C',
+            cus_id:cus_id
+        };
+            await Booking.create(newBooking).then(data => {
+                res.send({ success: true, message: 'Booking Created Successfully', data });
+            })
+            .catch(err => {
+                res.status.send({ success: false, message: err.message || "Booking Not Created" });
+            });
 
     } catch (error) {
         res.status(500).send({ success: false, message: error });
@@ -119,6 +165,49 @@ exports.findAllBookingSearch = async function (req, res, next) {
             left join status_desc sd
             on b.status=sd.status_code
             where book_id is not null `+ cond
+
+    const result = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    return res.send(result);
+}
+exports.findBookingCustomer = async function (req, res, next) {
+    const { keyword, lang } = req.query;
+    var cond = "";
+    if (keyword) {
+        cond = cond + `and job_title like '%` + keyword + `%' 
+                    or book_id like '%`+ keyword + `%' `
+    }
+    if (!lang) { lang = "en"; } //language
+    var sql = `select distinct
+                book_id,
+                machine_id,
+                driver_id,
+                d.name as driver_name,
+                mobile_id,
+                m.name as  mobile_name,
+                job_title,
+                location,
+                hospital_id,
+                hospital_name,
+                lat,
+                lng,
+                contact_mobile,
+                contact_person,
+                detail,
+                reservation_date,
+                reservation_time_start,
+                reservation_time_end,
+                concat(TIME_FORMAT(reservation_time_start,'%H:%i'),'-',TIME_FORMAT(reservation_time_end,'%H:%i')) as reserv_time,
+                reservation_by,
+                sd.status_name_`+ lang + ` as status_name
+            from
+                booking b
+            left join users d
+            on b.driver_id =d._id
+            left join users m 
+            on b.mobile_id=m._id
+            left join status_desc sd
+            on b.status=sd.status_code
+            where book_id is not null and b.cus_id='`+req.params.cus_id+`'`+ cond
 
     const result = await sequelize.query(sql, { type: QueryTypes.SELECT });
     return res.send(result);
