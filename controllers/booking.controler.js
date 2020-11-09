@@ -75,6 +75,54 @@ exports.create = async function (req, res) {
 }
 exports.createBookingCustomer = async function (req, res) {
     try {
+        if (!req.body.cus_id){
+            res.status.send({ success: false, message: "Not Data Customer" });
+        }
+        const {
+            job_title,
+            location,
+            hospital_id,
+            hospital_name,
+            contact_person,
+            contact_mobile,
+            detail,
+            reservation_date,
+            reservation_time_start,
+            reservation_time_end,
+            reservation_by,
+            update_by, 
+            cus_id
+        } = req.body;
+        const newBooking = {
+            job_title: job_title,
+            location: location,
+            hospital_id: hospital_id,
+            hospital_name: hospital_name,
+            contact_person: contact_person,
+            contact_mobile: contact_mobile,
+            detail: detail,
+            reservation_date: reservation_date,
+            reservation_time_start: reservation_time_start,
+            reservation_time_end: reservation_time_end,
+            reservation_by: reservation_by,
+            update_by: update_by,
+            status: 'CB',
+            booking_type:'C',
+            cus_id:cus_id
+        };
+            await Booking.create(newBooking).then(data => {
+                res.send({ success: true, message: 'Booking Created Successfully', data });
+            })
+            .catch(err => {
+                res.status.send({ success: false, message: err.message || "Booking Not Created" });
+            });
+
+    } catch (error) {
+        res.status(200).send({ success: false, message: error });
+    }
+}
+exports.EditBookingCustomer = async function (req, res) {
+    try {
         const {
             job_title,
             location,
@@ -102,16 +150,13 @@ exports.createBookingCustomer = async function (req, res) {
             reservation_time_start: reservation_time_start,
             reservation_time_end: reservation_time_end,
             reservation_by: reservation_by,
-            update_by: update_by,
-            status: 'CB',
-            booking_type:'C',
             cus_id:cus_id
         };
-            await Booking.create(newBooking).then(data => {
-                res.send({ success: true, message: 'Booking Created Successfully', data });
+            await Booking.update(newBooking,  {where: {book_id: req.params.id}}).then(data => {
+                res.send({ success: true, message: 'Booking Update Successfully', data });
             })
             .catch(err => {
-                res.status.send({ success: false, message: err.message || "Booking Not Created" });
+                res.status.send({ success: false, message: err.message || "Booking Not Update" });
             });
 
     } catch (error) {
@@ -155,7 +200,8 @@ exports.findAllBookingSearch = async function (req, res, next) {
                 reservation_time_end,
                 concat(TIME_FORMAT(reservation_time_start,'%H:%i'),'-',TIME_FORMAT(reservation_time_end,'%H:%i')) as reserv_time,
                 reservation_by,
-                sd.status_name_`+ lang + ` as status_name
+                sd.status_name_`+ lang + ` as status_name,
+                cancel_status
             from
                 booking b
             left join users d
@@ -198,7 +244,8 @@ exports.findBookingCustomer = async function (req, res, next) {
                 reservation_time_end,
                 concat(TIME_FORMAT(reservation_time_start,'%H:%i'),'-',TIME_FORMAT(reservation_time_end,'%H:%i')) as reserv_time,
                 reservation_by,
-                sd.status_name_`+ lang + ` as status_name
+                sd.status_name_`+ lang + ` as status_name,
+                cancel_status
             from
                 booking b
             left join users d
@@ -338,6 +385,24 @@ exports.cancel_booking =async function (req, res) {
              
     } catch (error) {
         res.status(500).send({ error: error });
+    }
+}
+exports.cancel_booking_customer=async function (req, res) {
+    try {
+        const newData={
+            cancel_status:1,
+            status:'CC'
+        }
+        await Booking.update(newData,{where: {book_id: req.params.id}})
+        .then(data => {
+            res.send({ success: true, message: 'Booking Cancel Successfully', data });
+        })
+        .catch(err => {
+            res.status(200).send({ success: false,message:err});
+        });
+             
+    } catch (error) {
+        res.status(200).send({ success: false,message:error});
     }
 }
 exports.delete =async function (req, res) {
