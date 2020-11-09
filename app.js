@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //var corsOptions = {origin: "http://localhost:8080"};
 //var corsOptions =  {origin: ["http://localhost:8080","www.two.com","www.three.com"],default: "http://localhost:8080"};
-var allowlist = ['https://tee-gpstraking.web.app', 'http://localhost:8080']
+var allowlist = ['https://booking-sodexo.web.app','https://tee-gpstraking.web.app', 'http://localhost:8080']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
